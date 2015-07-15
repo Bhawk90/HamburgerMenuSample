@@ -1,4 +1,5 @@
 ﻿using HamburgerMenuSample.Models;
+using HamburgerMenuSample.Pages;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -24,9 +25,13 @@ namespace HamburgerMenuSample
         // An invisible frame that we will use as a helper to load the content
         private Frame HiddenFrame = null;
 
+        // The default page that we'd like to show on application start
+        private Type InitialPageType = typeof(DefaultPage);
+
         public MainPage()
         {
             this.InitializeComponent();
+            this.Loaded += MainPage_Loaded;
 
             TargetUserControl = targetUserControl;
             HiddenFrame = new Frame();
@@ -49,6 +54,11 @@ namespace HamburgerMenuSample
         #endregion
 
         #region Event Handlers
+
+        private void MainPage_Loaded(object sender, RoutedEventArgs e)
+        {
+            Navigate(InitialPageType);
+        }
 
         private void HamburgerButton_Click(object sender, RoutedEventArgs e)
         {
