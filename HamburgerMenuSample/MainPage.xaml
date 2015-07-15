@@ -5,9 +5,61 @@
     xmlns:local="using:HamburgerMenuSample"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:models="using:HamburgerMenuSample.Models"
     mc:Ignorable="d">
+    
+    <Page.Resources>
+        <models:MainHamburgerMenu x:Name="MainHamburgerMenu"></models:MainHamburgerMenu>
+    </Page.Resources>
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+        <SplitView x:Name="MainView" DisplayMode="CompactOverlay" IsPaneOpen="False" CompactPaneLength="50" OpenPaneLength="250">
+            <SplitView.Pane>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
 
+                    <Button x:Name="HamburgerButton" 
+                            FontFamily="Segoe MDL2 Assets" Content="&#xE700;"
+                            Width="50" Height="50"
+                            Background="Transparent"
+                            Click="HamburgerButton_Click" />
+
+                    <ListView x:Name="listHamburgerMenu" Grid.Row="1" ItemsSource="{StaticResource MainHamburgerMenu}" SelectionChanged="listHamburgerMenu_SelectionChanged">
+                        <ListView.ItemContainerStyle>
+                            <Style TargetType="ListViewItem">
+                                <Setter Property="Margin" Value="0" />
+                                <Setter Property="Padding" Value="0" />
+                            </Style>
+                        </ListView.ItemContainerStyle>
+                        <ListView.ItemTemplate>
+                            <DataTemplate x:DataType="models:HamburgerMenuItem">
+                                <Grid Height="50">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="50" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+
+                                    <TextBlock FontFamily="Segoe MDL2 Assets" Text="{x:Bind Icon}" 
+                                               FontSize="18"
+                                               TextAlignment="Center"
+                                               VerticalAlignment="Center" HorizontalAlignment="Center"
+                                               Width="50" />
+
+                                    <TextBlock Text="{x:Bind Title}" FontSize="18" VerticalAlignment="Center"
+                                               Grid.Column="1"/>
+                                </Grid>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+                </Grid>
+            </SplitView.Pane>
+            <SplitView.Content>
+                <UserControl x:Name="targetUserControl" />
+            </SplitView.Content>
+        </SplitView>
     </Grid>
 </Page>

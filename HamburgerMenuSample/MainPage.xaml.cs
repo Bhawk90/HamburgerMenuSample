@@ -1,4 +1,5 @@
-﻿using System;
+﻿using HamburgerMenuSample.Models;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -13,18 +14,58 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 
-// The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
-
 namespace HamburgerMenuSample
 {
-    /// <summary>
-    /// An empty page that can be used on its own or navigated to within a Frame.
-    /// </summary>
     public sealed partial class MainPage : Page
     {
+        // The user control where the content will be placed
+        private UserControl TargetUserControl = null;
+
+        // An invisible frame that we will use as a helper to load the content
+        private Frame HiddenFrame = null;
+
         public MainPage()
         {
             this.InitializeComponent();
+
+            TargetUserControl = targetUserControl;
+            HiddenFrame = new Frame();
         }
+
+        #region Application Logic
+
+        public bool Navigate(Type target)
+        {
+            var navigation = HiddenFrame.Navigate(target);
+
+            if (navigation)
+            {
+                TargetUserControl.Content = HiddenFrame.Content as UIElement;
+            }
+
+            return navigation;
+        }
+
+        #endregion
+
+        #region Event Handlers
+
+        private void HamburgerButton_Click(object sender, RoutedEventArgs e)
+        {
+            // Toggle visibility of the pane
+            MainView.IsPaneOpen = !MainView.IsPaneOpen;
+        }
+
+        private void listHamburgerMenu_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            var item = (HamburgerMenuItem)listHamburgerMenu.SelectedItem;
+
+            if (item.TargetPage != null)
+            {
+                Navigate(item.TargetPage);
+            }
+        }
+
+        #endregion
     }
 }
